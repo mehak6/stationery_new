@@ -14,21 +14,18 @@ export interface Database {
           id: string
           name: string
           description: string | null
-          created_by: string | null
           created_at: string
         }
         Insert: {
           id?: string
           name: string
           description?: string | null
-          created_by?: string | null
           created_at?: string
         }
         Update: {
           id?: string
           name?: string
           description?: string | null
-          created_by?: string | null
           created_at?: string
         }
       }
@@ -74,7 +71,6 @@ export interface Database {
           supplier_info: Json | null
           image_url: string | null
           description: string | null
-          created_by: string | null
           created_at: string
           updated_at: string
         }
@@ -90,7 +86,6 @@ export interface Database {
           supplier_info?: Json | null
           image_url?: string | null
           description?: string | null
-          created_by?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -106,36 +101,6 @@ export interface Database {
           supplier_info?: Json | null
           image_url?: string | null
           description?: string | null
-          created_by?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-      }
-      profiles: {
-        Row: {
-          id: string
-          username: string
-          full_name: string | null
-          role: string
-          avatar_url: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id: string
-          username: string
-          full_name?: string | null
-          role?: string
-          avatar_url?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          username?: string
-          full_name?: string | null
-          role?: string
-          avatar_url?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -150,7 +115,6 @@ export interface Database {
           profit: number
           customer_info: Json | null
           sale_date: string
-          processed_by: string | null
           notes: string | null
           created_at: string
         }
@@ -163,7 +127,6 @@ export interface Database {
           profit: number
           customer_info?: Json | null
           sale_date?: string
-          processed_by?: string | null
           notes?: string | null
           created_at?: string
         }
@@ -176,7 +139,6 @@ export interface Database {
           profit?: number
           customer_info?: Json | null
           sale_date?: string
-          processed_by?: string | null
           notes?: string | null
           created_at?: string
         }
