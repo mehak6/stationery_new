@@ -6,83 +6,78 @@ import {
   AlertTriangle, 
   Plus, 
   Search, 
-  Filter,
   BarChart3,
   DollarSign,
-  Users,
-  Calendar,
   Edit,
   Trash2,
-  Eye,
-  Check,
-  X,
   FileImage,
-  Scan
+  X,
+  Check
 } from 'lucide-react';
 
-// Mock data to simulate the backend
+// You'll replace these with real Supabase calls
 const mockProducts = [
   {
     id: '1',
     name: 'Blue Pen',
-    category: 'Stationery',
+    category: { name: 'Stationery' },
     barcode: 'ST001',
     purchase_price: 5.00,
     selling_price: 8.00,
     stock_quantity: 45,
     min_stock_level: 10,
-    image_url: null
   },
   {
     id: '2',
     name: 'Chess Set',
-    category: 'Games',
+    category: { name: 'Games' },
     barcode: 'GM001',
     purchase_price: 25.00,
     selling_price: 40.00,
     stock_quantity: 3,
     min_stock_level: 5,
-    image_url: null
   },
   {
     id: '3',
     name: 'Notebook A4',
-    category: 'Stationery',
+    category: { name: 'Stationery' },
     barcode: 'ST002',
     purchase_price: 12.00,
     selling_price: 18.00,
     stock_quantity: 28,
     min_stock_level: 15,
-    image_url: null
   }
 ];
 
 const mockSales = [
   {
     id: '1',
-    product_name: 'Blue Pen',
+    products: { name: 'Blue Pen' },
     quantity: 5,
     unit_price: 8.00,
     total_amount: 40.00,
     profit: 15.00,
     sale_date: '2024-08-27',
-    customer_name: 'John Doe'
+    customer_info: { name: 'John Doe' }
   },
   {
     id: '2',
-    product_name: 'Notebook A4',
+    products: { name: 'Notebook A4' },
     quantity: 2,
     unit_price: 18.00,
     total_amount: 36.00,
     profit: 12.00,
     sale_date: '2024-08-27',
-    customer_name: 'Jane Smith'
+    customer_info: { name: 'Jane Smith' }
   }
 ];
 
 const mockCategories = [
-  { id: '1', name: 'Stationery', description: 'Office and school supplies' },
-  { id: '2', name: 'Games', description: 'Board games and puzzles' }
+  { id: '1', name: 'Stationery' },
+  { id: '2', name: 'Games' },
+  { id: '3', name: 'Art Supplies' },
+  { id: '4', name: 'Electronics' },
+  { id: '5', name: 'Books' }
 ];
 
 // Dashboard Component
@@ -106,7 +101,7 @@ function Dashboard({ onNavigate }) {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome back! Here's your business overview.</p>
+        <p className="text-gray-600 mt-2">Welcome! Here's your business overview.</p>
       </div>
 
       {/* Analytics Cards */}
@@ -168,7 +163,7 @@ function Dashboard({ onNavigate }) {
             {recentSales.map(sale => (
               <div key={sale.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div>
-                  <p className="font-medium text-gray-900">{sale.product_name}</p>
+                  <p className="font-medium text-gray-900">{sale.products.name}</p>
                   <p className="text-sm text-gray-500">Qty: {sale.quantity} • ₹{sale.unit_price}</p>
                 </div>
                 <div className="text-right">
@@ -196,7 +191,7 @@ function Dashboard({ onNavigate }) {
               <div key={product.id} className="flex items-center justify-between p-4 bg-danger-50 rounded-lg border border-danger-200">
                 <div>
                   <p className="font-medium text-gray-900">{product.name}</p>
-                  <p className="text-sm text-gray-500">{product.category}</p>
+                  <p className="text-sm text-gray-500">{product.category.name}</p>
                 </div>
                 <div className="text-right">
                   <p className="font-medium text-danger-600">{product.stock_quantity} left</p>
@@ -239,7 +234,7 @@ function ProductManagement({ onNavigate }) {
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.barcode?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !selectedCategory || product.category === selectedCategory;
+    const matchesCategory = !selectedCategory || product.category.name === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -301,7 +296,7 @@ function ProductManagement({ onNavigate }) {
         {filteredProducts.map(product => (
           <div key={product.id} className="card hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">
-              <span className="badge-info">{product.category}</span>
+              <span className="badge-info">{product.category.name}</span>
               <div className="flex gap-2">
                 <button className="p-1 text-gray-400 hover:text-primary-600">
                   <Edit className="h-4 w-4" />
@@ -371,7 +366,7 @@ function AddProductModal({ onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Adding product:', formData);
-    // Here you would normally call your API
+    // Here you would call your Supabase createProduct function
     alert('Product added successfully!');
     onClose();
   };
@@ -485,7 +480,7 @@ function AddProductModal({ onClose }) {
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                 className="input-field"
-                rows="3"
+                rows={3}
                 placeholder="Product description (optional)"
               />
             </div>
@@ -591,7 +586,7 @@ function QuickSale({ onNavigate }) {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium text-gray-900">{product.name}</h4>
-                    <p className="text-sm text-gray-500">{product.category} • {product.barcode}</p>
+                    <p className="text-sm text-gray-500">{product.category.name} • {product.barcode}</p>
                     <p className="text-sm font-medium text-secondary-600">₹{product.selling_price}</p>
                   </div>
                   <div className="text-right">
@@ -614,7 +609,7 @@ function QuickSale({ onNavigate }) {
               {/* Selected Product */}
               <div className="p-4 bg-primary-50 border border-primary-200 rounded-lg">
                 <h4 className="font-medium text-gray-900">{selectedProduct.name}</h4>
-                <p className="text-sm text-gray-500">{selectedProduct.category}</p>
+                <p className="text-sm text-gray-500">{selectedProduct.category.name}</p>
                 <p className="text-lg font-semibold text-primary-600">₹{selectedProduct.selling_price}</p>
               </div>
 
@@ -759,70 +754,38 @@ function InventoryApp() {
               <div className="flex-shrink-0">
                 <h1 className="text-xl font-bold text-primary-600">Inventory Pro</h1>
               </div>
-              <div className="hidden md:ml-8 md:flex md:space-x-8">
-                <button
-                  onClick={() => handleNavigate('dashboard')}
-                  className={`nav-link ${currentView === 'dashboard' ? 'nav-link-active' : ''}`}
-                >
-                  <BarChart3 className="h-5 w-5 mr-2" />
-                  Dashboard
-                </button>
-                <button
-                  onClick={() => handleNavigate('products')}
-                  className={`nav-link ${currentView === 'products' ? 'nav-link-active' : ''}`}
-                >
-                  <Package className="h-5 w-5 mr-2" />
-                  Products
-                </button>
-                <button
-                  onClick={() => handleNavigate('quick-sale')}
-                  className={`nav-link ${currentView === 'quick-sale' ? 'nav-link-active' : ''}`}
-                >
-                  <ShoppingCart className="h-5 w-5 mr-2" />
-                  Quick Sale
-                </button>
+              <div className="hidden md:block">
+                <div className="ml-10 flex items-baseline space-x-4">
+                  <button
+                    onClick={() => setCurrentView('dashboard')}
+                    className={`nav-link ${currentView === 'dashboard' ? 'nav-link-active' : ''}`}
+                  >
+                    Dashboard
+                  </button>
+                  <button
+                    onClick={() => setCurrentView('products')}
+                    className={`nav-link ${currentView === 'products' ? 'nav-link-active' : ''}`}
+                  >
+                    Products
+                  </button>
+                  <button
+                    onClick={() => setCurrentView('quick-sale')}
+                    className={`nav-link ${currentView === 'quick-sale' ? 'nav-link-active' : ''}`}
+                  >
+                    Quick Sale
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="flex items-center">
-              <span className="text-sm text-gray-500">Welcome, Admin</span>
-            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-      {/* Mobile Navigation */}
-      <div className="md:hidden bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-40">
-        <div className="flex justify-around py-2">
-          <button
-            onClick={() => handleNavigate('dashboard')}
-            className={`flex flex-col items-center p-2 ${currentView === 'dashboard' ? 'text-primary-600' : 'text-gray-500'}`}
-          >
-            <BarChart3 className="h-5 w-5" />
-            <span className="text-xs mt-1">Dashboard</span>
-          </button>
-          <button
-            onClick={() => handleNavigate('products')}
-            className={`flex flex-col items-center p-2 ${currentView === 'products' ? 'text-primary-600' : 'text-gray-500'}`}
-          >
-            <Package className="h-5 w-5" />
-            <span className="text-xs mt-1">Products</span>
-          </button>
-          <button
-            onClick={() => handleNavigate('quick-sale')}
-            className={`flex flex-col items-center p-2 ${currentView === 'quick-sale' ? 'text-primary-600' : 'text-gray-500'}`}
-          >
-            <ShoppingCart className="h-5 w-5" />
-            <span className="text-xs mt-1">Sale</span>
-          </button>
-        </div>
+        {/* Main Content */}
+        <main>
+          {renderCurrentView()}
+        </main>
       </div>
+    );
+  };
 
-      {/* Main Content */}
-      <main className="pb-16 md:pb-0">
-        {renderCurrentView()}
-      </main>
-    </div>
-  );
-}
-
-export default InventoryApp;
+  export default InventoryApp;
