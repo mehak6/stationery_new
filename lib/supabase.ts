@@ -1,22 +1,8 @@
-import { createClient } from '@supabase/supabase-js'
 import { Database } from './database.types'
+import { supabase } from '../supabase_client'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-// Create Supabase client (no auth needed)
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
-    detectSessionInUrl: false
-  },
-  realtime: {
-    params: {
-      eventsPerSecond: 2
-    }
-  }
-})
+// Re-export supabase client from the main client file
+export { supabase }
 
 // Type definitions for our database tables
 export type Product = Database['public']['Tables']['products']['Row']
