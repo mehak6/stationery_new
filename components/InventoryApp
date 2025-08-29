@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  ShoppingCart, 
-  Package, 
-  TrendingUp, 
-  AlertTriangle, 
-  Plus, 
-  Search, 
+import {
+  ShoppingCart,
+  Package,
+  TrendingUp,
+  AlertTriangle,
+  Plus,
+  Search,
   BarChart3,
   DollarSign,
   Edit,
@@ -15,7 +15,19 @@ import {
   Check
 } from 'lucide-react';
 
-// You'll replace these with real Supabase calls
+// Import Supabase functions
+import {
+  getProducts,
+  getSales,
+  getCategories,
+  createProduct,
+  getAnalytics,
+  type Product,
+  type Sale,
+  type Category
+} from '../lib/supabase.ts';
+
+// Mock data as fallback
 const mockProducts = [
   {
     id: '1',
@@ -778,14 +790,15 @@ function InventoryApp() {
               </div>
             </div>
           </div>
-        </nav>
+        </div>
+      </nav>
 
-        {/* Main Content */}
-        <main>
-          {renderCurrentView()}
-        </main>
-      </div>
-    );
-  };
+      {/* Main Content */}
+      <main>
+        {renderCurrentView()}
+      </main>
+    </div>
+  );
+}
 
-  export default InventoryApp;
+export default InventoryApp;
